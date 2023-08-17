@@ -1,85 +1,48 @@
 # dataset settings
 dataset_type = 'DOTADataset'
 data_root = 'data/blender_proc_sample/'
-backend_args = None
 
+img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
 train_pipeline = [
-    dict(type='mmdet.LoadImageFromFile', backend_args=backend_args),
-    dict(type='mmdet.LoadAnnotations', with_bbox=True, box_type='qbox'),
-    dict(type='ConvertBoxType', box_type_mapping=dict(gt_bboxes='rbox')),
-    dict(type='mmdet.Resize', scale=(512, 512), keep_ratio=True),
-    dict(
-        type='mmdet.RandomFlip',
-        prob=0.75,
-        direction=['horizontal', 'vertical', 'diagonal']),
-    dict(type='mmdet.PackDetInputs')
-]
-val_pipeline = [
-    dict(type='mmdet.LoadImageFromFile', backend_args=backend_args),
-    dict(type='mmdet.Resize', scale=(512, 512), keep_ratio=True),
-    # avoid bboxes being resized
-    dict(type='mmdet.LoadAnnotations', with_bbox=True, box_type='qbox'),
-    dict(type='ConvertBoxType', box_type_mapping=dict(gt_bboxes='rbox')),
-    dict(
-        type='mmdet.PackDetInputs',
-        meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
-                   'scale_factor'))
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='RResize', img_scale=(512, 512)),
+    dict(type='RRandomFlip', flip_ratio=0.5),
+    dict(type='Normalize', **img_norm_cfg),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
 ]
 test_pipeline = [
-    dict(type='mmdet.LoadImageFromFile', backend_args=backend_args),
-    dict(type='mmdet.Resize', scale=(1024, 1024), keep_ratio=True),
+    dict(type='LoadImageFromFile'),
     dict(
-        type='mmdet.PackDetInputs',
-        meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
-                   'scale_factor'))
+        type='MultiScaleFlipAug',
+        img_scale=(512, 512),
+        flip=False,
+        transforms=[
+            dict(type='RResize'),
+            dict(type='Normalize', **img_norm_cfg),
+            dict(type='Pad', size_divisor=32),
+            dict(type='DefaultFormatBundle'),
+            dict(type='Collect', keys=['img'])
+        ])
 ]
-train_dataloader = dict(
-    batch_size=2,
-    num_workers=2,
-    persistent_workers=True,
-    sampler=dict(type='DefaultSampler', shuffle=True),
-    batch_sampler=None,
-    dataset=dict(
+data = dict(
+    samples_per_gpu=1,
+    workers_per_gpu=1,
+    train=dict(
         type=dataset_type,
-        data_root=data_root,
-        ann_file='trainval/annfiles/',
-        data_prefix=dict(img_path='trainval/images/'),
-        filter_cfg=dict(filter_empty_gt=True),
-        pipeline=train_pipeline))
-val_dataloader = dict(
-    batch_size=1,
-    num_workers=2,
-    persistent_workers=True,
-    drop_last=False,
-    sampler=dict(type='DefaultSampler', shuffle=False),
-    dataset=dict(
+        ann_file=data_root + 'trainval/annfiles/',
+        img_prefix=data_root + 'trainval/images/',
+        pipeline=train_pipeline),
+    val=dict(
         type=dataset_type,
-        data_root=data_root,
-        ann_file='trainval/annfiles/',
-        data_prefix=dict(img_path='trainval/images/'),
-        test_mode=True,
-        pipeline=val_pipeline))
-test_dataloader = val_dataloader
-
-val_evaluator = dict(type='DOTAMetric', metric='mAP')
-test_evaluator = val_evaluator
-
-# inference on test dataset and format the output results
-# for submission. Note: the test set has no annotation.
-# test_dataloader = dict(
-#     batch_size=1,
-#     num_workers=2,
-#     persistent_workers=True,
-#     drop_last=False,
-#     sampler=dict(type='DefaultSampler', shuffle=False),
-#     dataset=dict(
-#         type=dataset_type,
-#         data_root=data_root,
-#         data_prefix=dict(img_path='test/images/'),
-#         test_mode=True,
-#         pipeline=test_pipeline))
-# test_evaluator = dict(
-#     type='DOTAMetric',
-#     format_only=True,
-#     merge_patches=True,
-#     outfile_prefix='./work_dirs/dota/Task1')
+        ann_file=data_root + 'trainval/annfiles/',
+        img_prefix=data_root + 'trainval/images/',
+        pipeline=test_pipeline),
+    test=dict(
+        type=dataset_type,
+        ann_file=data_root + 'test/images/',
+        img_prefix=data_root + 'test/images/',
+        pipeline=test_pipeline))
