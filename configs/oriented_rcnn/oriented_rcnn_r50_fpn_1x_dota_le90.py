@@ -112,7 +112,7 @@ model = dict(
     test_cfg=dict(
         rpn=dict(
             nms_pre=2000,
-            max_per_img=20,
+            max_per_img=200,
             nms=dict(type='nms', iou_threshold=0.8),
             min_bbox_size=0),
         rcnn=dict(
@@ -120,7 +120,7 @@ model = dict(
             min_bbox_size=0,
             score_thr=0.05,
             nms=dict(iou_thr=0.1),
-            max_per_img=20)))
+            max_per_img=200)))
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
