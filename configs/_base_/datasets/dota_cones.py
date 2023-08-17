@@ -10,7 +10,7 @@ train_pipeline = [
     dict(type='RResize', img_scale=(512, 512)),
     dict(type='RRandomFlip', flip_ratio=0.0),
     dict(type='Normalize', **img_norm_cfg),
-    dict(type='Pad', size_divisor=0),
+    dict(type='Pad', size_divisor=2),
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_bboxes', 'gt_labels'])
 ]
@@ -23,7 +23,7 @@ test_pipeline = [
         transforms=[
             dict(type='RResize'),
             dict(type='Normalize', **img_norm_cfg),
-            dict(type='Pad', size_divisor=0),
+            dict(type='Pad', size_divisor=2),
             dict(type='DefaultFormatBundle'),
             dict(type='Collect', keys=['img'])
         ])
