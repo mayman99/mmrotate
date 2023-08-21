@@ -7,3 +7,4 @@ cd mmrotate
 pip install -v -e .
 mim download mmrotate --config oriented_rcnn_r50_fpn_1x_dota_le90 --dest .
 python demo/image_demo.py demo/demo.jpg oriented_rcnn_r50_fpn_1x_dota_le90.py oriented_rcnn_r50_fpn_1x_dota_le90-6d2b2ce0.pth --out-file result.jpg
+python tools/train.py configs/oriented_rcnn/oriented_rcnn_r50_fpn_1x_dota_le90.py
