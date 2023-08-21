@@ -112,7 +112,7 @@ model = dict(
     test_cfg=dict(
         rpn=dict(
             nms_pre=2000,
-            max_per_img=200,
+            max_per_img=2000,
             nms=dict(type='nms', iou_threshold=0.8),
             min_bbox_size=0),
         rcnn=dict(
@@ -120,7 +120,7 @@ model = dict(
             min_bbox_size=0,
             score_thr=0.05,
             nms=dict(iou_thr=0.1),
-            max_per_img=200)))
+            max_per_img=2000)))
 
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
@@ -130,7 +130,7 @@ train_pipeline = [
     dict(type='RResize', img_scale=(512, 512)),
     dict(
         type='RRandomFlip',
-        flip_ratio=[0.0, 0.0, 0.0],
+        flip_ratio=[0.2, 0.2, 0.2],
         direction=['horizontal', 'vertical', 'diagonal'],
         version=angle_version),
     dict(type='Normalize', **img_norm_cfg),
@@ -143,4 +143,4 @@ data = dict(
     val=dict(version=angle_version),
     test=dict(version=angle_version))
 
-optimizer = dict(lr=0.0005)
+optimizer = dict(lr=0.005)
