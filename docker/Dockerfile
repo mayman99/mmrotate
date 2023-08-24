@@ -1,6 +1,6 @@
-ARG PYTORCH="1.6.0"
-ARG CUDA="10.1"
-ARG CUDNN="7"
+ARG PYTORCH="1.7.0"
+ARG CUDA="11.0"
+ARG CUDNN="8"
 
 FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
 
@@ -17,11 +17,12 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6 git ninja-build 
     && rm -rf /var/lib/apt/lists/*
 
 # Install MMCV MMDetection
-RUN pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu101/torch1.6.0/index.html
+RUN pip install -U openmim
+RUN pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torch1.7.0/index.html
 RUN pip install mmdet
 # Install MMRotate
 RUN conda clean --all
-RUN git clone https://github.com/open-mmlab/mmrotate.git /mmrotate
+RUN git clone -b local_dev https://github.com/mayman99/mmrotate.git /mmrotate
 WORKDIR /mmrotate
 ENV FORCE_CUDA="1"
 RUN pip install -r requirements/build.txt
