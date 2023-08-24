@@ -22,7 +22,7 @@ RUN pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu110/torc
 RUN pip install mmdet
 # Install MMRotate
 RUN conda clean --all
-RUN git clone https://github.com/mayman99/mmrotate.git /mmrotate
+RUN git clone -b dev_2 https://github.com/mayman99/mmrotate.git /mmrotate
 WORKDIR /mmrotate
 ENV FORCE_CUDA="1"
 RUN pip install -r requirements/build.txt
