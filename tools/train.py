@@ -180,6 +180,9 @@ def main():
     # add an attribute for visualization convenience
     model.CLASSES = datasets[0].CLASSES
     cfg.device = get_device()
+    cfg.log_config.hooks = [
+        dict(type='TextLoggerHook'),
+        dict(type='TensorboardLoggerHook')]
     train_detector(
         model,
         datasets,
