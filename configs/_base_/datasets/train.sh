@@ -10,3 +10,5 @@ python demo/image_demo.py demo/demo.jpg oriented_rcnn_r50_fpn_1x_dota_le90.py or
 python tools/train.py configs/oriented_rcnn/oriented_rcnn_r50_fpn_1x_dota_le90.py
 python demo/image_demo.py data/blender_proc_sample/trainval/images/4.png work_dirs/oriented_rcnn_r50_fpn_1x_dota_le90/oriented_rcnn_r50_fpn_1x_dota_le90.py work_dirs/oriented_rcnn_r50_fpn_1x_dota_le90/epoch_30.pth --out-file result.jpg
 python demo/image_demo.py data/oobb_cones_dota/trainval/images/15.png work_dirs/oriented_rcnn_r50_fpn_1x_dota_le90/oriented_rcnn_r50_fpn_1x_dota_le90.py work_dirs/oriented_rcnn_r50_fpn_1x_dota_le90/epoch_8.pth --out-file result.jpg
+python tools/deployment/mmrotate2torchserve.py work_dirs/cfa_r50_fpn_40e_dota_oc/cfa_r50_fpn_40e_dota_oc.py work_dirs/cfa_r50_fpn_40e_dota_oc/epoch_10.pth --output-folder data/mini_oobb_cones_dota/cfa_r50_fpn_40e_dota_oc/
+pip install torch-model-archiver==0.4.0

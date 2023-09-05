@@ -14,7 +14,7 @@ model = dict(
     refine_heads=[
         dict(
             type='RotatedRetinaRefineHead',
-            num_classes=15,
+            num_classes=114,
             in_channels=256,
             stacked_convs=4,
             feat_channels=256,

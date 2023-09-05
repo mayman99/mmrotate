@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/datasets/dotav1.py', '../_base_/schedules/schedule_1x.py',
+    '../_base_/datasets/dota_cones.py', '../_base_/schedules/schedule_1x.py',
     '../_base_/default_runtime.py'
 ]
 
@@ -26,7 +26,7 @@ model = dict(
         num_outs=5),
     bbox_head=dict(
         type='RotatedRetinaHead',
-        num_classes=15,
+        num_classes=114,
         in_channels=256,
         stacked_convs=4,
         feat_channels=256,
@@ -117,7 +117,7 @@ img_norm_cfg = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='RResize', img_scale=(1024, 1024)),
+    dict(type='RResize', img_scale=(512, 512)),
     dict(
         type='RRandomFlip',
         flip_ratio=[0.25, 0.25, 0.25],
