@@ -130,7 +130,7 @@ train_pipeline = [
     dict(type='RResize', img_scale=(512, 512)),
     dict(
         type='RRandomFlip',
-        flip_ratio=[0.2, 0.2, 0.2],
+        flip_ratio=[0.1, 0.1, 0.1],
         direction=['horizontal', 'vertical', 'diagonal'],
         version=angle_version),
     dict(type='Normalize', **img_norm_cfg),
@@ -143,4 +143,4 @@ data = dict(
     val=dict(version=angle_version),
     test=dict(version=angle_version))
 
-optimizer = dict(lr=0.005)
+optimizer = dict(lr=0.007)

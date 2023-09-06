@@ -9,5 +9,5 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
     step=[24, 32, 38])
-runner = dict(type='EpochBasedRunner', max_epochs=10)
+runner = dict(type='EpochBasedRunner', max_epochs=60)
 checkpoint_config = dict(interval=2)
